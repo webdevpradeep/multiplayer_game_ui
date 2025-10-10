@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Gamepad2,
   Search,
@@ -17,11 +17,24 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
+import { apiClient } from "../utils/apiClient";
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const [games, setGames] = useState([]);
+
+  useEffect(() => {
+    const listGames = async () => {
+      const res = await apiClient.listGames();
+      console.log(res.games);
+      setGames(res.games);
+      console.log(games);
+    };
+    listGames();
+  }, []); // Re-run when 'count' changes
 
   const categories = [
     { id: "all", name: "All Games", icon: Gamepad2 },
@@ -31,106 +44,111 @@ const Home = () => {
     { id: "multiplayer", name: "Multiplayer", icon: Users },
   ];
 
-  const games = [
-    {
-      id: 1,
-      title: "Cyber Legends",
-      category: "Action RPG",
-      image:
-        "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&h=600&fit=crop",
-      rating: 4.8,
-      players: "2.5M",
-      tags: ["trending", "multiplayer", "popular"],
-      description: "Enter a futuristic world of cybernetic warriors",
-    },
-    {
-      id: 2,
-      title: "Mystic Realms",
-      category: "Fantasy MMORPG",
-      image:
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop",
-      rating: 4.9,
-      players: "5.2M",
-      tags: ["popular", "multiplayer"],
-      description: "Explore magical realms with friends",
-    },
-    {
-      id: 3,
-      title: "Speed Rivals",
-      category: "Racing",
-      image:
-        "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=800&h=600&fit=crop",
-      rating: 4.7,
-      players: "1.8M",
-      tags: ["trending", "multiplayer"],
-      description: "High-octane racing action",
-    },
-    {
-      id: 4,
-      title: "Shadow Protocol",
-      category: "Tactical Shooter",
-      image:
-        "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
-      rating: 4.6,
-      players: "3.1M",
-      tags: ["new", "multiplayer", "popular"],
-      description: "Strategic combat in the shadows",
-    },
-    {
-      id: 5,
-      title: "Dragon Quest Odyssey",
-      category: "Adventure",
-      image:
-        "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=800&h=600&fit=crop",
-      rating: 4.9,
-      players: "4.3M",
-      tags: ["popular", "trending"],
-      description: "Epic dragon hunting adventure",
-    },
-    {
-      id: 6,
-      title: "Neon Warfare",
-      category: "Battle Royale",
-      image:
-        "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&h=600&fit=crop",
-      rating: 4.5,
-      players: "6.7M",
-      tags: ["new", "trending", "multiplayer"],
-      description: "Last one standing wins",
-    },
-    {
-      id: 7,
-      title: "Space Odyssey 2077",
-      category: "Sci-Fi Exploration",
-      image:
-        "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&h=600&fit=crop",
-      rating: 4.8,
-      players: "2.9M",
-      tags: ["new", "popular"],
-      description: "Explore the infinite cosmos",
-    },
-    {
-      id: 8,
-      title: "Kingdom Warriors",
-      category: "Strategy",
-      image:
-        "https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=800&h=600&fit=crop",
-      rating: 4.7,
-      players: "1.5M",
-      tags: ["multiplayer"],
-      description: "Build your empire and conquer",
-    },
-  ];
+  // const games = [
+  //   {
+  //     id: 1,
+  //     title: "snake ",
+  //     category: "Action RPG",
+  //     image:
+  //       "https://cdn.soft112.com/snake-ladder-online-offline/00/00/0H/0S/00000H0S1V/pad_screenshot.png",
+
+  //     rating: 4.8,
+  //     players: "2.5M",
+  //     tags: ["trending", "multiplayer", "popular"],
+  //     description: "Enter a futuristic world of cybernetic warriors",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "ludo",
+  //     category: "Fantasy MMORPG",
+  //     image:
+  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTSgr3hgfV_DIqVuWtHOhF8lb7BhLxYY9YMQ&s",
+  //     rating: 4.9,
+  //     players: "5.2M",
+  //     tags: ["popular", "multiplayer"],
+  //     description: "Explore magical realms with friends",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Speed Rivals",
+  //     category: "Racing",
+  //     image:
+  //       "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=800&h=600&fit=crop",
+  //     rating: 4.7,
+  //     players: "1.8M",
+  //     tags: ["trending", "multiplayer"],
+  //     description: "High-octane racing action",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Shadow Protocol",
+  //     category: "Tactical Shooter",
+  //     image:
+  //       "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
+  //     rating: 4.6,
+  //     players: "3.1M",
+  //     tags: ["new", "multiplayer", "popular"],
+  //     description: "Strategic combat in the shadows",
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Dragon Quest Odyssey",
+  //     category: "Adventure",
+  //     image:
+  //       "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=800&h=600&fit=crop",
+  //     rating: 4.9,
+  //     players: "4.3M",
+  //     tags: ["popular", "trending"],
+  //     description: "Epic dragon hunting adventure",
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Neon Warfare",
+  //     category: "Battle Royale",
+  //     image:
+  //       "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&h=600&fit=crop",
+  //     rating: 4.5,
+  //     players: "6.7M",
+  //     tags: ["new", "trending", "multiplayer"],
+  //     description: "Last one standing wins",
+  //   },
+  //   {
+  //     id: 7,
+  //     title: "Space Odyssey 2077",
+  //     category: "Sci-Fi Exploration",
+  //     image:
+  //       "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&h=600&fit=crop",
+  //     rating: 4.8,
+  //     players: "2.9M",
+  //     tags: ["new", "popular"],
+  //     description: "Explore the infinite cosmos",
+  //   },
+  //   {
+  //     id: 8,
+  //     title: "Kingdom Warriors",
+  //     category: "Strategy",
+  //     image:
+  //       "https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=800&h=600&fit=crop",
+  //     rating: 4.7,
+  //     players: "1.5M",
+  //     tags: ["multiplayer"],
+  //     description: "Build your empire and conquer",
+  //   },
+  // ];
 
   const filteredGames = games.filter((game) => {
-    const matchesSearch =
-      game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      game.category.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || game.tags.includes(selectedCategory);
-    return matchesSearch && matchesCategory;
+    let matchesSearch = [];
+    matchesSearch = game?.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    // || game.category.toLowerCase().includes(searchQuery.toLowerCase());
+    // const matchesCategory =
+    //   selectedCategory === "all" || game.tags.includes(selectedCategory);
+    // return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
+  console.log(games);
   const featuredGame = games[0];
 
   return (
@@ -257,26 +275,26 @@ const Home = () => {
                       FEATURED GAME
                     </div>
                     <h1 className="text-4xl lg:text-6xl font-bold text-white">
-                      {featuredGame.title}
+                      {featuredGame?.name}
                     </h1>
                     <p className="text-gray-400 text-lg">
-                      {featuredGame.description}
+                      {/* {featuredGame.description} */}
                     </p>
                     <div className="flex items-center gap-6 text-sm">
                       <div className="flex items-center gap-2">
                         <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                         <span className="text-white font-semibold">
-                          {featuredGame.rating}
+                          {/* {featuredGame.rating} */}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="w-5 h-5 text-cyan-400" />
                         <span className="text-white">
-                          {featuredGame.players} Players
+                          {/* {featuredGame.players} Players */}
                         </span>
                       </div>
                       <div className="px-3 py-1 bg-purple-500/20 rounded-full text-purple-300 text-xs font-semibold">
-                        {featuredGame.category}
+                        {/* {featuredGame.category} */}
                       </div>
                     </div>
                     <div className="flex gap-4 pt-4">
@@ -292,8 +310,8 @@ const Home = () => {
                   </div>
                   <div className="relative">
                     <img
-                      src={featuredGame.image}
-                      alt={featuredGame.title}
+                      src={featuredGame?.thumbnail}
+                      alt={featuredGame?.name}
                       className="rounded-2xl shadow-2xl transform group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -360,15 +378,15 @@ const Home = () => {
               >
                 <div className="relative overflow-hidden aspect-video">
                   <img
-                    src={game.image}
-                    alt={game.title}
+                    src={game.thumbnail}
+                    alt={game?.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
                   <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-gray-900/80 backdrop-blur-sm rounded-lg">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span className="text-white text-sm font-semibold">
-                      {game.rating}
+                      {/* {game.rating} */}
                     </span>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
@@ -381,16 +399,16 @@ const Home = () => {
                 <div className="p-4 space-y-3">
                   <div>
                     <h3 className="text-white font-bold text-lg group-hover:text-purple-400 transition-colors">
-                      {game.title}
+                      {game?.name}
                     </h3>
-                    <p className="text-gray-400 text-sm">{game.category}</p>
+                    {/* <p className="text-gray-400 text-sm">{game.category}</p> */}
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1 text-cyan-400">
                       <Users className="w-4 h-4" />
-                      <span>{game.players}</span>
+                      {/* <span>{game.players}</span> */}
                     </div>
-                    <div className="flex gap-1">
+                    {/* <div className="flex gap-1">
                       {game.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
@@ -399,7 +417,7 @@ const Home = () => {
                           {tag}
                         </span>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

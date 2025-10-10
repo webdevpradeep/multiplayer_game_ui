@@ -1,4 +1,12 @@
-import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Upload,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -6,8 +14,20 @@ const SignUp = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -22,6 +42,39 @@ const SignUp = () => {
       </div>
 
       <form onSubmit={handleSignup} className="space-y-4">
+        {/* Profile Photo Upload */}
+        <div className="flex flex-col items-center">
+          <div className="relative group">
+            <div className="w-28 h-28 rounded-full overflow-hidden bg-slate-700 border-4 border-slate-600 shadow-xl transition-all duration-300 group-hover:border-purple-500">
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <User className="w-12 h-12 text-slate-500" />
+                </div>
+              )}
+            </div>
+            <label
+              htmlFor="profile-upload"
+              className="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-transform duration-200"
+            >
+              <Upload className="w-5 h-5 text-white" />
+            </label>
+            <input
+              id="profile-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </div>
+          <p className="text-xs text-slate-400 mt-3">Upload your avatar</p>
+        </div>
+
         {/* input sec : USERNAME */}
         <div className="relative group">
           <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 transition-colors group-hover:text-purple-300" />
