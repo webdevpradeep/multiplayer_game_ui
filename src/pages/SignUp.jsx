@@ -6,19 +6,20 @@ import {
   Mail,
   Upload,
   User,
-} from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { apiClient } from '../utils/apiClient';
 
 const SignUp = () => {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [profileImage, setProfileImage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
-  
-  const handleImageUpload = (e) => {
+
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -27,12 +28,36 @@ const SignUp = () => {
       };
       reader.readAsDataURL(file);
     }
+
+    try {
+      await apiClient.uploadProfileImage({ image: profileImage });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     // Handle signup logic here
+
+    try {
+      const data = await apiClient.signup({
+        name,
+        email,
+        password,
+        // profileImage,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    if (profileImage) {
+      console.log(profileImage); // ✅ Logs only after state updates
+    }
+  }, [profileImage]);
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -81,8 +106,8 @@ const SignUp = () => {
           <input
             type="text"
             name="userName"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Username"
             className="w-full bg-gray-900/50 border border-purple-500/30 rounded-lg pl-12 pr-4 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
             required
@@ -110,7 +135,7 @@ const SignUp = () => {
         <div className="relative group">
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 transition-colors group-hover:text-purple-300" />
           <input
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -156,7 +181,7 @@ const SignUp = () => {
       </form>
 
       <div className="text-center text-gray-400">
-        Already have an account?{" "}
+        Already have an account?{' '}
         <Link
           to="/login"
           className="text-purple-400 hover:text-purple-300 font-semibold transition-colors"
