@@ -1,7 +1,7 @@
 import { getCookie } from "./cookies";
 
-// const baseURL = 'http://192.168.1.150:5000';
-const baseURL = "http://localhost:5000";
+const baseURL = 'http://192.168.1.150:5000';
+// const baseURL = "http://localhost:5000";
 
 export const apiClient = async (url, method, body = null, tokenName = "") => {
   const accessToken = getCookie("access_token");
