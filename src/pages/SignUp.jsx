@@ -17,7 +17,7 @@ const SignUp = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
-
+  
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
