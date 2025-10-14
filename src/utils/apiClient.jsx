@@ -1,19 +1,19 @@
-import { getCookie } from "./cookies";
+import { getCookie } from './cookies';
 
 // const baseURL = "http://192.168.1.150:5000";
-const baseURL = "http://localhost:5000";
+const baseURL = 'http://localhost:5000';
 
-export const apiClient = async (url, method, body = null, tokenName = "") => {
-  const accessToken = getCookie("access_token");
+export const apiClient = async (url, method, body = null, tokenName = '') => {
+  const accessToken = getCookie('access_token');
 
   const defaultHeaders = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
 
   if (tokenName) {
-    defaultHeaders["Authorization"] = `Bearer ${getCookie(tokenName)}`;
+    defaultHeaders['Authorization'] = `Bearer ${getCookie(tokenName)}`;
   } else {
-    defaultHeaders["Authorization"] = `Bearer ${accessToken}`;
+    defaultHeaders['Authorization'] = `Bearer ${accessToken}`;
   }
 
   let config;
@@ -42,15 +42,18 @@ export const apiClient = async (url, method, body = null, tokenName = "") => {
 // user authentication ...............................
 // Auth APIs
 apiClient.login = async (payload) =>
-  await apiClient("/users/login", "POST", payload);
+  await apiClient('/users/login', 'POST', payload);
 
 apiClient.signup = async (payload) =>
-  await apiClient("/users/signup", "POST", payload);
+  await apiClient('/users/signup', 'POST', payload);
 
 apiClient.resetPassword = async (token, payload) =>
-  await apiClient(`/users/resetPassword/${token}`, "PATCH", payload);
+  await apiClient(`/users/resetPassword/${token}`, 'PATCH', payload);
 
 apiClient.forgotPassword = async (payload) =>
-  await apiClient("/users/forgotPassword", "PATCH", payload);
+  await apiClient('/users/forgotPassword', 'PATCH', payload);
 
-apiClient.listGames = async () => await apiClient("/games", "GET");
+apiClient.uploadProfileImage = (payload) =>
+  apiClient('/users/profile/image', 'PATCH', payload);
+
+apiClient.listGames = async () => await apiClient('/games', 'GET');
