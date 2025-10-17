@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Gamepad2,
   Search,
@@ -16,13 +16,31 @@ import {
   Flame,
   Trophy,
   Zap,
-} from "lucide-react";
-import { apiClient } from "../utils/apiClient";
+} from 'lucide-react';
+import { apiClient } from '../utils/apiClient';
+import { useLocation, useNavigate } from 'react-router';
+import { useGlobalContext } from '../context/globalContext';
 
 const Home = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { isLogin } = useGlobalContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // const chooseRoute = isLogin ? "/profile" : "/login";
+
+  const checkLogin = () => {
+    if (!isLogin) {
+      // Redirect programmatically
+      navigate('/login', { state: { from: location }, replace: true });
+    } else {
+      // Redirect to profile if logged in
+      navigate('/profile');
+    }
+  };
 
   const [games, setGames] = useState([]);
 
@@ -37,11 +55,11 @@ const Home = () => {
   }, []); // Re-run when 'count' changes
 
   const categories = [
-    { id: "all", name: "All Games", icon: Gamepad2 },
-    { id: "trending", name: "Trending", icon: TrendingUp },
-    { id: "new", name: "New Releases", icon: Zap },
-    { id: "popular", name: "Popular", icon: Flame },
-    { id: "multiplayer", name: "Multiplayer", icon: Users },
+    { id: 'all', name: 'All Games', icon: Gamepad2 },
+    { id: 'trending', name: 'Trending', icon: TrendingUp },
+    { id: 'new', name: 'New Releases', icon: Zap },
+    { id: 'popular', name: 'Popular', icon: Flame },
+    { id: 'multiplayer', name: 'Multiplayer', icon: Users },
   ];
 
   // const games = [
@@ -346,8 +364,8 @@ const Home = () => {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium whitespace-nowrap transition-all ${
                       selectedCategory === category.id
-                        ? "bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-lg shadow-purple-500/30"
-                        : "bg-gray-900/50 text-gray-400 hover:text-white hover:bg-gray-800/50 border border-purple-500/20"
+                        ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-lg shadow-purple-500/30'
+                        : 'bg-gray-900/50 text-gray-400 hover:text-white hover:bg-gray-800/50 border border-purple-500/20'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -363,8 +381,8 @@ const Home = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-white">
-              {selectedCategory === "all"
-                ? "All Games"
+              {selectedCategory === 'all'
+                ? 'All Games'
                 : categories.find((c) => c.id === selectedCategory)?.name}
             </h2>
             <span className="text-gray-400">{filteredGames.length} games</span>
