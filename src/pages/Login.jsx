@@ -26,6 +26,9 @@ const Login = () => {
       const data = await apiClient.login({ email, password });
       console.log(data);
 
+      setEmail('');
+      setPassword('');
+
       const tokenExpiresIn = data.expiresIn;
       const currentMilies = Date.now();
 
