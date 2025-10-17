@@ -1,13 +1,23 @@
-import { ArrowRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
-import { Link } from "react-router";
-import { useState } from "react";
-import { apiClient } from "../utils/apiClient";
+import { ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { useState } from 'react';
+import { apiClient } from '../utils/apiClient';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import { setCookie } from '../utils/cookies';
+import { useGlobalContext } from '../context/globalContext';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  const { isLogin, setIsLogin, setUserProfile } = useGlobalContext();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,6 +25,31 @@ const Login = () => {
     try {
       const data = await apiClient.login({ email, password });
       console.log(data);
+
+      const tokenExpiresIn = data.expiresIn;
+      const currentMilies = Date.now();
+
+      dayjs.extend(duration);
+
+      function convertExpiryToSeconds(expiryString) {
+        const unit = expiryString.slice(-1).toUpperCase(); // e.g. "H"
+        const value = parseInt(expiryString.slice(0, -1), 10); // e.g. 1
+
+        const expiryDuration = dayjs
+          .duration(value, unit === 'H' ? 'hour' : unit)
+          .asSeconds();
+        return expiryDuration;
+      }
+
+      setCookie('token', data.token, convertExpiryToSeconds(tokenExpiresIn));
+
+      setIsLogin(true);
+
+      setUserProfile(data);
+
+      navigate(from, { replace: true });
+
+      console.log(currentMilies, convertExpiryToSeconds(tokenExpiresIn) * 1000);
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +83,7 @@ const Login = () => {
         <div className="relative group">
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 transition-colors group-hover:text-purple-300" />
           <input
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -92,7 +127,7 @@ const Login = () => {
       </form>
 
       <div className="text-center text-gray-400">
-        Don't have an account?{" "}
+        Don't have an account?{' '}
         <Link
           to="/signUp"
           className="text-purple-400 hover:text-purple-300 font-semibold transition-colors"
