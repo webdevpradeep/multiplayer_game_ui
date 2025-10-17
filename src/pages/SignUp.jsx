@@ -8,7 +8,7 @@ import {
   User,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { apiClient } from '../utils/apiClient';
 
 const SignUp = () => {
@@ -18,6 +18,10 @@ const SignUp = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -48,6 +52,8 @@ const SignUp = () => {
         // profileImage,
       });
       console.log(data);
+
+      navigate(from, { replace: true });
     } catch (error) {
       console.log(error);
     }
