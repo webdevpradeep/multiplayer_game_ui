@@ -167,6 +167,7 @@ const Home = () => {
   });
 
   console.log(games);
+
   const featuredGame = games[0];
 
   return (
@@ -229,7 +230,10 @@ const Home = () => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </button>
               <button className="p-2 text-gray-400 hover:text-white transition-colors">
-                <User className="w-5 h-5" />
+                <User
+                  className="w-5 h-5"
+                  onClick={() => (window.location.href = '/login')}
+                />
               </button>
               <button
                 className="md:hidden p-2 text-white"
