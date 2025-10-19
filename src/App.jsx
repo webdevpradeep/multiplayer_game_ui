@@ -1,17 +1,20 @@
-import { Route, Routes } from "react-router";
-import ForgotPassword from "./pages/ForgotPassword";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import NotFoundPage from "./pages/NotFoundPage";
-import ResetPassword from "./pages/ResetPassword";
-import SignUp from "./pages/SignUp";
-import AuthLaout from "./laout/AuthLaout";
+import { Route, Routes } from 'react-router';
+import ForgotPassword from './pages/ForgotPassword';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import NotFoundPage from './pages/NotFoundPage';
+import ResetPassword from './pages/ResetPassword';
+import SignUp from './pages/SignUp';
+import AuthLaout from './laout/AuthLaout';
+import Profile from './pages/Profile';
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/profile" element={<Profile />} />
 
         <Route
           path="/login"
