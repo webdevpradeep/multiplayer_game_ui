@@ -35,6 +35,11 @@ const Login = () => {
       dayjs.extend(duration);
 
       function convertExpiryToSeconds(expiryString) {
+        if (!expiryString || typeof expiryString !== 'string') {
+          // console.warn('expiryString undefined या invalid है:', expiryString);
+          return 3600; // default 1 hour
+        }
+
         const unit = expiryString.slice(-1).toUpperCase(); // e.g. "H"
         const value = parseInt(expiryString.slice(0, -1), 10); // e.g. 1
 
