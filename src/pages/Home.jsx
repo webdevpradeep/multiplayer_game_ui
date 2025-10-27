@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Gamepad2,
   Search,
@@ -6,167 +6,29 @@ import {
   Star,
   Users,
   Play,
-  Clock,
-  Filter,
-  Menu,
-  X,
-  Bell,
-  User,
   ChevronRight,
   Flame,
-  Trophy,
   Zap,
 } from 'lucide-react';
-import { apiClient } from '../utils/apiClient';
-import { useLocation, useNavigate } from 'react-router';
-import { useGlobalContext } from '../context/globalContext';
+import MainHeader from '../componenets/MainHeader';
+import { categoriesData, gameData } from '../data/data';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { isLogin } = useGlobalContext();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const categories = categoriesData;
 
-  // const chooseRoute = isLogin ? "/profile" : "/login";
-
-  const checkLogin = () => {
-    if (!isLogin) {
-      // Redirect programmatically
-      navigate('/login', { state: { from: location }, replace: true });
-    } else {
-      // Redirect to profile if logged in
-      navigate('/profile');
-    }
-  };
-
-  const [games, setGames] = useState([]);
-
-  useEffect(() => {
-    const listGames = async () => {
-      const res = await apiClient.listGames();
-      console.log(res.games);
-      setGames(res.games);
-      console.log(games);
-    };
-    listGames();
-  }, []); // Re-run when 'count' changes
-
-  const categories = [
-    { id: 'all', name: 'All Games', icon: Gamepad2 },
-    { id: 'trending', name: 'Trending', icon: TrendingUp },
-    { id: 'new', name: 'New Releases', icon: Zap },
-    { id: 'popular', name: 'Popular', icon: Flame },
-    { id: 'multiplayer', name: 'Multiplayer', icon: Users },
-  ];
-
-  // const games = [
-  //   {
-  //     id: 1,
-  //     title: "snake ",
-  //     category: "Action RPG",
-  //     image:
-  //       "https://cdn.soft112.com/snake-ladder-online-offline/00/00/0H/0S/00000H0S1V/pad_screenshot.png",
-
-  //     rating: 4.8,
-  //     players: "2.5M",
-  //     tags: ["trending", "multiplayer", "popular"],
-  //     description: "Enter a futuristic world of cybernetic warriors",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "ludo",
-  //     category: "Fantasy MMORPG",
-  //     image:
-  //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTSgr3hgfV_DIqVuWtHOhF8lb7BhLxYY9YMQ&s",
-  //     rating: 4.9,
-  //     players: "5.2M",
-  //     tags: ["popular", "multiplayer"],
-  //     description: "Explore magical realms with friends",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Speed Rivals",
-  //     category: "Racing",
-  //     image:
-  //       "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=800&h=600&fit=crop",
-  //     rating: 4.7,
-  //     players: "1.8M",
-  //     tags: ["trending", "multiplayer"],
-  //     description: "High-octane racing action",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Shadow Protocol",
-  //     category: "Tactical Shooter",
-  //     image:
-  //       "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop",
-  //     rating: 4.6,
-  //     players: "3.1M",
-  //     tags: ["new", "multiplayer", "popular"],
-  //     description: "Strategic combat in the shadows",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Dragon Quest Odyssey",
-  //     category: "Adventure",
-  //     image:
-  //       "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=800&h=600&fit=crop",
-  //     rating: 4.9,
-  //     players: "4.3M",
-  //     tags: ["popular", "trending"],
-  //     description: "Epic dragon hunting adventure",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Neon Warfare",
-  //     category: "Battle Royale",
-  //     image:
-  //       "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&h=600&fit=crop",
-  //     rating: 4.5,
-  //     players: "6.7M",
-  //     tags: ["new", "trending", "multiplayer"],
-  //     description: "Last one standing wins",
-  //   },
-  //   {
-  //     id: 7,
-  //     title: "Space Odyssey 2077",
-  //     category: "Sci-Fi Exploration",
-  //     image:
-  //       "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=800&h=600&fit=crop",
-  //     rating: 4.8,
-  //     players: "2.9M",
-  //     tags: ["new", "popular"],
-  //     description: "Explore the infinite cosmos",
-  //   },
-  //   {
-  //     id: 8,
-  //     title: "Kingdom Warriors",
-  //     category: "Strategy",
-  //     image:
-  //       "https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=800&h=600&fit=crop",
-  //     rating: 4.7,
-  //     players: "1.5M",
-  //     tags: ["multiplayer"],
-  //     description: "Build your empire and conquer",
-  //   },
-  // ];
+  const games = gameData;
 
   const filteredGames = games.filter((game) => {
-    let matchesSearch = [];
-    matchesSearch = game?.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    // || game.category.toLowerCase().includes(searchQuery.toLowerCase());
-    // const matchesCategory =
-    //   selectedCategory === "all" || game.tags.includes(selectedCategory);
-    // return matchesSearch && matchesCategory;
-    return matchesSearch;
+    const matchesSearch =
+      game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      game.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'all' || game.tags.includes(selectedCategory);
+    return matchesSearch && matchesCategory;
   });
-
-  console.log(games);
 
   const featuredGame = games[0];
 
@@ -179,108 +41,8 @@ const Home = () => {
       </div>
 
       {/* Header */}
-      <header className=" z-50 bg-gray-900/80 backdrop-blur-xl border-b border-purple-500/30 sticky top-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl blur-lg opacity-50" />
-                <div className="relative bg-gradient-to-br from-purple-600 to-cyan-600 p-2 rounded-xl">
-                  <Gamepad2 className="w-6 h-6 text-white" />
-                </div>
-              </div>
-              <span className="text-xl font-bold text-white hidden sm:block">
-                GamePortal
-              </span>
-            </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-6">
-              <a
-                href="#"
-                className="text-white hover:text-purple-400 transition-colors"
-              >
-                Home
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Library
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Community
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                Store
-              </a>
-            </nav>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-4">
-              <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
-              <button
-                onClick={checkLogin}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
-              >
-                <User className="w-5 h-5" />
-              </button>
-              <button
-                className="md:hidden p-2 text-white"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden py-4 animate-fadeIn">
-              <nav className="flex flex-col gap-3">
-                <a
-                  href="#"
-                  className="text-white hover:text-purple-400 transition-colors py-2"
-                >
-                  Home
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors py-2"
-                >
-                  Library
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors py-2"
-                >
-                  Community
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors py-2"
-                >
-                  Store
-                </a>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <MainHeader />
 
       {/* Main Content */}
       <main className="relative z-10">
@@ -297,26 +59,26 @@ const Home = () => {
                       FEATURED GAME
                     </div>
                     <h1 className="text-4xl lg:text-6xl font-bold text-white">
-                      {featuredGame?.name}
+                      {featuredGame.title}
                     </h1>
                     <p className="text-gray-400 text-lg">
-                      {/* {featuredGame.description} */}
+                      {featuredGame.description}
                     </p>
                     <div className="flex items-center gap-6 text-sm">
                       <div className="flex items-center gap-2">
                         <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                         <span className="text-white font-semibold">
-                          {/* {featuredGame.rating} */}
+                          {featuredGame.rating}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="w-5 h-5 text-cyan-400" />
                         <span className="text-white">
-                          {/* {featuredGame.players} Players */}
+                          {featuredGame.players} Players
                         </span>
                       </div>
                       <div className="px-3 py-1 bg-purple-500/20 rounded-full text-purple-300 text-xs font-semibold">
-                        {/* {featuredGame.category} */}
+                        {featuredGame.category}
                       </div>
                     </div>
                     <div className="flex gap-4 pt-4">
@@ -332,8 +94,8 @@ const Home = () => {
                   </div>
                   <div className="relative">
                     <img
-                      src={featuredGame?.thumbnail}
-                      alt={featuredGame?.name}
+                      src={featuredGame.image}
+                      alt={featuredGame.title}
                       className="rounded-2xl shadow-2xl transform group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -400,15 +162,15 @@ const Home = () => {
               >
                 <div className="relative overflow-hidden aspect-video">
                   <img
-                    src={game.thumbnail}
-                    alt={game?.name}
+                    src={game.image}
+                    alt={game.title}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
                   <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-gray-900/80 backdrop-blur-sm rounded-lg">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span className="text-white text-sm font-semibold">
-                      {/* {game.rating} */}
+                      {game.rating}
                     </span>
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50">
@@ -421,16 +183,16 @@ const Home = () => {
                 <div className="p-4 space-y-3">
                   <div>
                     <h3 className="text-white font-bold text-lg group-hover:text-purple-400 transition-colors">
-                      {game?.name}
+                      {game.title}
                     </h3>
-                    {/* <p className="text-gray-400 text-sm">{game.category}</p> */}
+                    <p className="text-gray-400 text-sm">{game.category}</p>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1 text-cyan-400">
                       <Users className="w-4 h-4" />
-                      {/* <span>{game.players}</span> */}
+                      <span>{game.players}</span>
                     </div>
-                    {/* <div className="flex gap-1">
+                    <div className="flex gap-1">
                       {game.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
@@ -439,7 +201,7 @@ const Home = () => {
                           {tag}
                         </span>
                       ))}
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -459,51 +221,6 @@ const Home = () => {
           )}
         </section>
       </main>
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-        
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.5;
-            transform: scale(1.1);
-          }
-        }
-        
-        .animate-pulse {
-          animation: pulse 4s ease-in-out infinite;
-        }
-        
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </div>
   );
 };
