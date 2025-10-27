@@ -57,7 +57,7 @@ const Login = () => {
 
   const handleSocialLogin = () => {
     window.location.href =
-      'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?&=%3D&client_id=923970255363-gtk7furi5rnub2u1vk08mlrn276bhr4s.apps.googleusercontent.com&redirect_uri=http://localhost:5173/google&response_type=code&display=page&scope=email%20openid%20profile&service=lso&o2v=1&flowName=GeneralOAuthFlow';
+      'https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?&=%3D&client_id=991578126159-2kcvp3un05r9mmmlacm4u8kqdf2s0gvt.apps.googleusercontent.com&redirect_uri=http://localhost:5173/google&response_type=code&display=page&scope=email%20openid%20profile&service=lso&o2v=1&flowName=GeneralOAuthFlow';
   };
 
   return (
