@@ -11,7 +11,7 @@ import {
   Zap,
 } from 'lucide-react';
 import MainHeader from '../componenets/MainHeader';
-import { categoriesData, gameData } from '../data/data';
+import { categoriesData, gameData } from '/data/data';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
