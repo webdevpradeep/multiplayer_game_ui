@@ -7,12 +7,19 @@ import ResetPassword from './pages/ResetPassword';
 import SignUp from './pages/SignUp';
 import AuthLaout from './laout/AuthLaout';
 import Profile from './pages/Profile';
+import ProtectedRoute from './componenets/protectedRoute';
+import AddGame from './pages/AddGame';
+import { useGlobalContext } from './context/globalContext';
+import GoogleLogin from './pages/GoogleLogin';
 
 function App() {
+  const { userProfile } = useGlobalContext();
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/google" element={<GoogleLogin />} />
 
         <Route path="/profile" element={<Profile />} />
 
@@ -46,6 +53,15 @@ function App() {
             <AuthLaout>
               <ResetPassword />
             </AuthLaout>
+          }
+        />
+
+        <Route
+          path="/addGame"
+          element={
+            <ProtectedRoute>
+              {userProfile?.role === 'ADMIN' ? <AddGame /> : <NotFoundPage />}
+            </ProtectedRoute>
           }
         />
 
